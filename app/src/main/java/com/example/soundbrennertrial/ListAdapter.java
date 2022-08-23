@@ -19,13 +19,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder>
+public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder>
         implements View.OnTouchListener {
 
     private List<CommonModel> list;
     private Listener listener;
 
-    ListAdapter(List<CommonModel> list, Listener listener) {
+    public ListAdapter(List<CommonModel> list, Listener listener) {
         this.list = list;
         this.listener = listener;
     }
@@ -75,7 +75,7 @@ class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder>
         this.list = list;
     }
 
-    DragListener getDragInstance() {
+    public DragListener getDragInstance() {
         if (listener != null) {
             return new DragListener(listener);
         } else {

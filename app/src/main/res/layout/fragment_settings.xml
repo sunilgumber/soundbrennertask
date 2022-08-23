@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentTop="true"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:background="@color/colorbgmain"
+    android:gravity="center_horizontal">
+
+
+    <TextView
+        android:id="@+id/tvinclude"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:gravity="left|center"
+        android:textSize="20dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:text="Include" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvTop"
+        android:layout_width="match_parent"
+        android:minHeight="40dp"
+        android:layout_height="wrap_content"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#cccccc"/>
+
+    <TextView
+        android:id="@+id/tvdontinclude"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:gravity="left|center"
+        android:textSize="20dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:text="Do Not Include" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvBottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+</LinearLayout>
+

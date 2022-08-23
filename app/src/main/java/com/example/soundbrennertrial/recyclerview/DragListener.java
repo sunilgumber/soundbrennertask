@@ -1,9 +1,14 @@
-package com.example.soundbrennertrial;
+package com.example.soundbrennertrial.recyclerview;
 
 import android.view.DragEvent;
 import android.view.View;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.soundbrennertrial.R;
+import com.example.soundbrennertrial.model.CommonModel;
+import com.example.soundbrennertrial.model.EnumCategory;
+import com.example.soundbrennertrial.model.Listener;
 
 import java.util.List;
 
@@ -60,7 +65,9 @@ public class DragListener implements View.OnDragListener {
                             int positionSource = (int) viewSource.getTag();
                             int sourceId = source.getId();
 
-                            CommonModel list = adapterSource.getList().get(positionSource);
+                            CommonModel commonModel = adapterSource.getList().get(positionSource);
+                            if (!commonModel.getIsswipeable())break; ;
+                            commonModel.setCategory(target.getId()==rvTop? EnumCategory.Include:EnumCategory.DontInclude);
                             List<CommonModel> listSource = adapterSource.getList();
 
                             listSource.remove(positionSource);
@@ -69,10 +76,11 @@ public class DragListener implements View.OnDragListener {
 
                             ListAdapter adapterTarget = (ListAdapter) target.getAdapter();
                             List<CommonModel> customListTarget = adapterTarget.getList();
+
                             if (positionTarget >= 0) {
-                                customListTarget.add(positionTarget, list);
+                                customListTarget.add(positionTarget, commonModel);
                             } else {
-                                customListTarget.add(list);
+                                customListTarget.add(commonModel);
                             }
                             adapterTarget.updateList(customListTarget);
                             adapterTarget.notifyDataSetChanged();

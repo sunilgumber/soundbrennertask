@@ -1,4 +1,4 @@
-package com.example.soundbrennertrial;
+package com.example.soundbrennertrial.model;
 
 public interface Listener {
     void setEmptyListTop(boolean visibility);

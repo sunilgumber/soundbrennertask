@@ -9,24 +9,23 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
-import com.example.soundbrennertrial.CommonModel
-import com.example.soundbrennertrial.ListAdapter
-import com.example.soundbrennertrial.Listener
+import com.example.soundbrennertrial.model.CommonModel
+import com.example.soundbrennertrial.recyclerview.ListAdapter
+import com.example.soundbrennertrial.model.Listener
 import com.example.soundbrennertrial.R
 import com.example.soundbrennertrial.databinding.FragmentSettingsBinding
-import kotlinx.android.synthetic.main.fragment_settings.*
+import com.example.soundbrennertrial.model.EnumCategory
 
-class SettingsFragment : Fragment() , Listener {
+class SettingsFragment : Fragment() ,
+    Listener {
     private var _binding: FragmentSettingsBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
 
-    @BindView(R.id.rvTop)
-    var rvTop: RecyclerView? = null
-    @BindView(R.id.rvBottom)
-    var rvBottom: RecyclerView? = null
+    lateinit var rvTop: RecyclerView
+    lateinit var rvBottom: RecyclerView
     companion object {
         fun newInstance() = SettingsFragment()
     }
@@ -51,27 +50,36 @@ class SettingsFragment : Fragment() , Listener {
     }
 
     private fun initTopRecyclerView() {
-        rvTop!!.layoutManager = LinearLayoutManager(
+        rvTop.layoutManager = LinearLayoutManager(
             requireContext(), LinearLayoutManager.VERTICAL, false
         )
         val topList: MutableList<CommonModel> = ArrayList()
-        topList.add(CommonModel("A",true))
-        topList.add(CommonModel("B",true))
-        val topListAdapter = ListAdapter(topList, this)
-        rvTop!!.adapter = topListAdapter
-        rvTop!!.setOnDragListener(topListAdapter.dragInstance)
+        topList.add(CommonModel("Tuner",true,EnumCategory.Include))
+        topList.add(CommonModel("Metronome",true,EnumCategory.Include))
+        topList.add(CommonModel("Handheld Tuner",true,EnumCategory.Include))
+        topList.add(CommonModel("dB meter",true,EnumCategory.Include))
+        topList.add(CommonModel("Timer",true,EnumCategory.Include))
+        topList.add(CommonModel("StopWatch",true,EnumCategory.Include))
+        val topListAdapter =
+            ListAdapter(topList, this)
+        rvTop.adapter = topListAdapter
+        rvTop.setOnDragListener(topListAdapter.dragInstance)
     }
 
     private fun initBottomRecyclerView() {
-        rvBottom!!.layoutManager = LinearLayoutManager(
+        rvBottom.layoutManager = LinearLayoutManager(
             requireContext(), LinearLayoutManager.VERTICAL, false
         )
         val bottomList: MutableList<CommonModel> = ArrayList()
-        bottomList.add(CommonModel("C",true))
-        bottomList.add(CommonModel("D",true))
-        val bottomListAdapter = ListAdapter(bottomList, this)
-        rvBottom!!.adapter = bottomListAdapter
-        rvBottom!!.setOnDragListener(bottomListAdapter.dragInstance)
+        bottomList.add(CommonModel("Alarm",true,EnumCategory.DontInclude))
+        bottomList.add(CommonModel("Contact Tuner",false,EnumCategory.DontInclude))
+        val bottomListAdapter =
+            ListAdapter(
+                bottomList,
+                this
+            )
+        rvBottom.adapter = bottomListAdapter
+        rvBottom.setOnDragListener(bottomListAdapter.dragInstance)
     }
 
     override fun onDestroyView() {

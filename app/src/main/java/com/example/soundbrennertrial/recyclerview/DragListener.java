@@ -66,7 +66,7 @@ public class DragListener implements View.OnDragListener {
 
                             listSource.remove(positionSource);
                             adapterSource.updateList(listSource);
-                            adapterSource.notifyDataSetChanged();
+                           // adapterSource.notifyDataSetChanged();
 
                             ListAdapter adapterTarget = (ListAdapter) target.getAdapter();
                             List<CommonModel> customListTarget = adapterTarget.getCommonmodellist();
@@ -77,7 +77,7 @@ public class DragListener implements View.OnDragListener {
                                 customListTarget.add(commonModel);
                             }
                             adapterTarget.updateList(customListTarget);
-                            adapterTarget.notifyDataSetChanged();
+                           // adapterTarget.notifyDataSetChanged();
 
                         }
                         break;

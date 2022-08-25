@@ -2,6 +2,7 @@ package com.example.soundbrennertrial.ui.settings
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -20,22 +21,19 @@ class SettingsFragment : Fragment() ,
     Listener {
     private var _binding: FragmentSettingsBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     lateinit var rvTop: RecyclerView
     lateinit var rvBottom: RecyclerView
-    companion object {
-        fun newInstance() = SettingsFragment()
-    }
-
-    private lateinit var viewModel: SettingsViewModel
+    val topList: MutableList<CommonModel> = ArrayList()
+    val bottomList: MutableList<CommonModel> = ArrayList()
+    lateinit var  topListAdapter:ListAdapter
+    lateinit var  bottomListAdapter:ListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val metronomeViewModel =
             ViewModelProvider(this).get(SettingsViewModel::class.java)
 
@@ -43,7 +41,6 @@ class SettingsFragment : Fragment() ,
         val root: View = binding.root
         rvTop=root.findViewById<RecyclerView>(R.id.rvTop)
         rvBottom=root.findViewById<RecyclerView>(R.id.rvBottom)
-        // ButterKnife.bind(this)
         initTopRecyclerView()
         initBottomRecyclerView()
              return root
@@ -53,14 +50,14 @@ class SettingsFragment : Fragment() ,
         rvTop.layoutManager = LinearLayoutManager(
             requireContext(), LinearLayoutManager.VERTICAL, false
         )
-        val topList: MutableList<CommonModel> = ArrayList()
-        topList.add(CommonModel("Tuner",true,EnumCategory.Include))
-        topList.add(CommonModel("Metronome",true,EnumCategory.Include))
-        topList.add(CommonModel("Handheld Tuner",true,EnumCategory.Include))
-        topList.add(CommonModel("dB meter",true,EnumCategory.Include))
-        topList.add(CommonModel("Timer",true,EnumCategory.Include))
-        topList.add(CommonModel("StopWatch",true,EnumCategory.Include))
-        val topListAdapter =
+        topList.add(CommonModel("Tuner",true,EnumCategory.Include,false))
+        topList.add(CommonModel("Metronome",true,EnumCategory.Include,false))
+        topList.add(CommonModel("Handheld Tuner",true,EnumCategory.Include,false))
+        topList.add(CommonModel("dB meter",true,EnumCategory.Include,false))
+        topList.add(CommonModel("Timer",true,EnumCategory.Include,false))
+        topList.add(CommonModel("StopWatch",true,EnumCategory.Include,false))
+        topList.add(CommonModel("Settings",true,EnumCategory.Include,true))
+         topListAdapter =
             ListAdapter(topList, this)
         rvTop.adapter = topListAdapter
         rvTop.setOnDragListener(topListAdapter.dragInstance)
@@ -70,14 +67,9 @@ class SettingsFragment : Fragment() ,
         rvBottom.layoutManager = LinearLayoutManager(
             requireContext(), LinearLayoutManager.VERTICAL, false
         )
-        val bottomList: MutableList<CommonModel> = ArrayList()
-        bottomList.add(CommonModel("Alarm",true,EnumCategory.DontInclude))
-        bottomList.add(CommonModel("Contact Tuner",false,EnumCategory.DontInclude))
-        val bottomListAdapter =
-            ListAdapter(
-                bottomList,
-                this
-            )
+        bottomList.add(CommonModel("Alarm",true,EnumCategory.DontInclude,false))
+        bottomList.add(CommonModel("Contact Tuner",false,EnumCategory.DontInclude,false))
+        bottomListAdapter = ListAdapter(bottomList, this)
         rvBottom.adapter = bottomListAdapter
         rvBottom.setOnDragListener(bottomListAdapter.dragInstance)
     }
@@ -87,10 +79,20 @@ class SettingsFragment : Fragment() ,
         _binding = null
     }
 
-    override fun setEmptyListTop(visibility: Boolean) {
-    }
-
-    override fun setEmptyListBottom(visibility: Boolean) {
+    override fun swapitems(commonModel: CommonModel?) {
+        if (commonModel?.category==EnumCategory.Include){
+            topList.remove(commonModel)
+            commonModel.category=EnumCategory.DontInclude
+            bottomList.add(commonModel)
+        }
+        else if(commonModel?.category==EnumCategory.DontInclude)
+        {
+            bottomList.remove(commonModel)
+            commonModel.category=EnumCategory.Include
+            topList.add(commonModel)
+        }
+        topListAdapter.notifyDataSetChanged()
+        bottomListAdapter.notifyDataSetChanged()
     }
 
 }

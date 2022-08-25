@@ -28,11 +28,11 @@ import butterknife.ButterKnife;
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder>
         implements View.OnTouchListener {
 
-    private List<CommonModel> list;
+    private List<CommonModel> commonmodellist;
     private final Listener listener;
 
     public ListAdapter(List<CommonModel> list, Listener listener) {
-        this.list = list;
+        this.commonmodellist = list;
         this.listener = listener;
     }
 
@@ -46,18 +46,25 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
 
     @Override
     public void onBindViewHolder(ListViewHolder holder, int position) {
-        holder.ivminusorplus.setImageResource(list.get(position).getCategory()== EnumCategory.Include?R.drawable.ic_android_tables_resources_left_action_text_minus:R.drawable.ic_android_tables_resources_left_action_text_plus);
-        holder.ivequalicon.setVisibility(list.get(position).getIsswipeable()?View.VISIBLE:View.GONE);
-        holder.text.setText(list.get(position).getName());
+        holder.ivminusorplus.setVisibility(commonmodellist.get(position).getIsexceptional()?View.GONE:View.VISIBLE);
+        holder.ivminusorplus.setImageResource(commonmodellist.get(position).getCategory()== EnumCategory.Include?R.drawable.ic_android_tables_resources_left_action_text_minus:R.drawable.ic_android_tables_resources_left_action_text_plus);
+        holder.ivequalicon.setVisibility(commonmodellist.get(position).getIsswipeable()?View.VISIBLE:View.GONE);
+        holder.text.setText(commonmodellist.get(position).getName());
         holder.frameLayout.setTag(position);
         holder.frameLayout.setOnTouchListener(this);
-        holder.frameLayout.setOnDragListener(new DragListener(listener));
+        holder.frameLayout.setOnDragListener(new DragListener());
+        holder.ivminusorplus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.swapitems(commonmodellist.get(position));
+            }
+        });
     }
 
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return commonmodellist.size();
     }
 
     @Override
@@ -76,17 +83,17 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
         return false;
     }
 
-    List<CommonModel> getList() {
-        return list;
+    List<CommonModel> getCommonmodellist() {
+        return commonmodellist;
     }
 
     void updateList(List<CommonModel> list) {
-        this.list = list;
+        this.commonmodellist = list;
     }
 
     public DragListener getDragInstance() {
         if (listener != null) {
-            return new DragListener(listener);
+            return new DragListener();
         } else {
             Log.e("ListAdapter", "Listener wasn't initialized!");
             return null;

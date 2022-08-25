@@ -8,18 +8,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.soundbrennertrial.R;
 import com.example.soundbrennertrial.model.CommonModel;
 import com.example.soundbrennertrial.model.EnumCategory;
-import com.example.soundbrennertrial.model.Listener;
 
 import java.util.List;
 
 public class DragListener implements View.OnDragListener {
 
     private boolean isDropped = false;
-    private Listener listener;
-
-    DragListener(Listener listener) {
-        this.listener = listener;
-    }
 
     @Override
     public boolean onDrag(View v, DragEvent event) {
@@ -65,17 +59,17 @@ public class DragListener implements View.OnDragListener {
                             int positionSource = (int) viewSource.getTag();
                             int sourceId = source.getId();
 
-                            CommonModel commonModel = adapterSource.getList().get(positionSource);
-                            if (!commonModel.getIsswipeable())break; ;
+                            CommonModel commonModel = adapterSource.getCommonmodellist().get(positionSource);
+                            if (!commonModel.getIsswipeable()||commonModel.getIsexceptional())break; ;
                             commonModel.setCategory(target.getId()==rvTop? EnumCategory.Include:EnumCategory.DontInclude);
-                            List<CommonModel> listSource = adapterSource.getList();
+                            List<CommonModel> listSource = adapterSource.getCommonmodellist();
 
                             listSource.remove(positionSource);
                             adapterSource.updateList(listSource);
                             adapterSource.notifyDataSetChanged();
 
                             ListAdapter adapterTarget = (ListAdapter) target.getAdapter();
-                            List<CommonModel> customListTarget = adapterTarget.getList();
+                            List<CommonModel> customListTarget = adapterTarget.getCommonmodellist();
 
                             if (positionTarget >= 0) {
                                 customListTarget.add(positionTarget, commonModel);
@@ -85,18 +79,6 @@ public class DragListener implements View.OnDragListener {
                             adapterTarget.updateList(customListTarget);
                             adapterTarget.notifyDataSetChanged();
 
-                            if (sourceId == rvBottom && adapterSource.getItemCount() < 1) {
-                                listener.setEmptyListBottom(true);
-                            }
-                            if (viewId == tvEmptyListBottom) {
-                                listener.setEmptyListBottom(false);
-                            }
-                            if (sourceId == rvTop && adapterSource.getItemCount() < 1) {
-                                listener.setEmptyListTop(true);
-                            }
-                            if (viewId == tvEmptyListTop) {
-                                listener.setEmptyListTop(false);
-                            }
                         }
                         break;
                 }
